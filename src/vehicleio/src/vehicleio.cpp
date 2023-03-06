@@ -1,11 +1,12 @@
 #include "vehicleio.hpp"
 #include "commons.hpp"
+
 using namespace cv;
 vehicleIO::vehicleIO()
 {   
     subscriber.reset(new eCAL::CSubscriber("ctrl"));
     subscriber->AddReceiveCallback(std::bind(&vehicleIO::receive_data, this, std::placeholders::_1, std::placeholders::_2));
-    publisher.reset(new eCAL::CPublisher("pix_feedback"));
+    publisher.reset(new eCAL::string::CPublisher<std::string>("pix_feedback"));
     frame.reset(new ctrl);
 }
 
@@ -247,11 +248,10 @@ bool vehicleIO::write_vcu()
 FEEDBACK vehicleIO::feed_from_pix_control()
 {
     std::cout<<"\n\nFeedback\n\n"<<std::endl;
-    // for opencv
-    
 
-    FEEDBACK feedback;
     std::shared_ptr<ctrl> feed_frame = frame;
+    
+    FEEDBACK feedback;
     scpp::CanFrame fr;
     if (socket_can_read.open("can0") == scpp::STATUS_OK)
     {
@@ -295,6 +295,6 @@ void vehicleIO::send_to_control(FEEDBACK feed)
     // std::cout << feed.vehicle_speed << ", " << feed.steering_angle << std::endl;
     std::stringstream ss;
     IPC_send.serialize(feed,ss);
-    std::string temp = ss.str().data();
-    publisher->Send(temp.c_str(),sizeof(temp));
+    std::string temp = ss.str();
+    publisher->Send(temp);
 }

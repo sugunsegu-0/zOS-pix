@@ -33,7 +33,7 @@ class vehicleIO
         bool write_park(float parkTarget);
         bool write_vcu();
         std::unique_ptr<eCAL::CSubscriber> subscriber;
-        std::unique_ptr<eCAL::CPublisher> publisher;
+        std::unique_ptr<eCAL::string::CPublisher<std::string>> publisher;
         void send_to_control(FEEDBACK feed);
         float check(float val,float MAX_VAL);
 

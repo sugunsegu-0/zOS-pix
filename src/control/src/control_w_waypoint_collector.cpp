@@ -32,6 +32,7 @@ using namespace std;
 
 
 #include "control/control-DS.hpp"
+#include "vehicleio/vehicle_DS.hpp"
 
 using namespace std::chrono_literals;
 using std::placeholders::_1;
@@ -101,7 +102,7 @@ two_points getLFCpoint(cv::Point start, float m, float l)
 }
 void save_waypoints() {
     
-    ofstream path_file("/home/minuszero/zOS/src/control/src/tracked_path.txt", std::ofstream::out);
+    ofstream path_file("/home/mz/Documents/sugun_zos/zOS-pix/src/control/src/tracked_path.txt", std::ofstream::out);
 
     cout << "saved" << endl;
     if (path_file.is_open())
@@ -145,11 +146,13 @@ class State
     float prev_x = 0.0;
 
     eCAL::string::CSubscriber<std::string> gps_odom_sub{"gps/odom"};
+    eCAL::string::CSubscriber<std::string> vehicle{"vehicle-feed"};
     State(float yaw_in=0,float v_in=0)
     {
         yaw=yaw_in;
         v=v_in;
         gps_odom_sub.AddReceiveCallback(std::bind(&State::Update,this,std::placeholders::_2));
+        vehicle.AddReceiveCallback(std::bind(&State::plot_feed,this,std::placeholders::_2));
 
     }
     void theroy(float vel,float delta)
@@ -161,6 +164,53 @@ class State
         rear_x = x - ((WB / 2) * cos(yaw));
         rear_y = y - ((WB / 2) * sin(yaw));
 
+    }
+    
+    void plot_feed(const std::string &msg)
+    {   
+        std::cout<< "my code"<<std::endl;
+        std::vector<double> in;
+        std::vector<double> out;
+        std::stringstream ss_fe_in(msg);
+        Serialize<FEEDBACK> data;
+        FEEDBACK out_data;
+        out_data = data.deserialize(ss_fe_in,out_data);
+        cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
+        cout << ".........in" << endl;
+        if(in.size()>999)
+        {
+            in.erase(in.begin());
+            in.push_back(v);
+            out.erase(out.begin());
+            out.push_back(out_data.vehicle_speed); 
+        }
+        else
+        {
+            in.push_back(v);
+            out.push_back(out_data.vehicle_speed);
+        }
+
+        std::vector<cv::Point> pts;
+        std::vector<cv::Point> pts_1;
+        int i=0;
+        for(auto In:in)
+        {
+            pts.push_back(cv::Point(i,500+In*10));
+            i++;
+        }
+        i=0;
+        for(auto ou:out)
+        {
+            pts_1.push_back(cv::Point(i,500+ou*10));
+            i++;
+        }
+
+        cv::polylines(blueImage,pts,false,cv::Scalar(0,0,255),1,LINE_8);
+        cv::polylines(blueImage,pts_1,false,cv::Scalar(0,255,0),1,LINE_8);    
+        
+
+        cv::imshow("Graph Plot", blueImage);
+        cv::waitKey(1);
     }
     void Update(const std::string &msg)
     {
@@ -330,47 +380,7 @@ std::pair<float,float> pure_pursuit_steer_control(State* state,TargetCourse traj
     }
     
 
-void visualize()
-{
-    cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
-    cout << ".........in" << endl;
-    if(in.size()>999)
-    {
-        in.erase(in.begin());
-        in.push_back(10.0);
-        out.erase(out.begin());
-        out.push_back(5.0); 
-    }
-    else
-    {
-        in.push_back(10.0);
-        out.push_back(f5.0);
-    }
 
-    std::vector<cv::Point> pts;
-    std::vector<cv::Point> pts_1;
-    int i=0;
-    for(auto In:in)
-    {
-        pts.push_back(cv::Point(i,500+In*10));
-        i++;
-    }
-    i=0;
-    for(auto ou:out)
-    {
-        pts_1.push_back(cv::Point(i,500+ou*10));
-        i++;
-    }
-
-    cv::polylines(blueImage,pts,false,cv::Scalar(0,0,255),1,LINE_8);
-    cv::polylines(blueImage,pts_1,false,cv::Scalar(0,255,0),1,LINE_8);    
-    
-    debug_i++;
-
-    cv::imshow("Graph Plot", blueImage);
-    cv::waitKey(1);
-    blueImage = cv::Scalar(255,255,255);
-}
 
 std::vector<float> quaternion_from_euler(float roll,float pitch,float yaw)
 {
@@ -403,7 +413,7 @@ int main(int argc, char * argv[])
     eCAL::string::CPublisher<std::string> out_control{"ctrl"};
 
     ifstream inFile;
-    inFile.open("/home/mz/Documents/zOS/src/SAL/gps/src/path.txt");
+    inFile.open("/home/mz/Documents/sugun_zos/zOS-pix/src/SAL/gps/src/path.txt");
     int count = 0; 
     double val;
 
@@ -449,7 +459,7 @@ int main(int argc, char * argv[])
                 auto diff= atan2(cy[i+j+2] - cy[i+j+1], cx[i+j+2] - cx[i+j+1]) - atan2(cy[i+j+1] - cy[i+j], cx[i+1+j] - cx[i+j]);
                 cumum_sum=cumum_sum+abs(diff);
             }
-        cout << cumum_sum/5 << endl;
+        // cout << cumum_sum/5 << endl;
         curvature.push_back(cumum_sum/5);
     }
 
@@ -473,7 +483,7 @@ int main(int argc, char * argv[])
     
     while(eCAL::Ok() &&  lastIndex-6 != index)
     {
-        visualize();
+        
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
         if(gps_init)
         {
