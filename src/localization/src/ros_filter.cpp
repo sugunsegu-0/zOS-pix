@@ -789,10 +789,9 @@ namespace RobotLocalization
     Serialize<Odometry> data;
     Odometry odom;
     odom = data.deserialize(ss_odom_in,odom);
-
+    // cout << "...................................topicName: " << topicName << endl;
     if (odom.header.time <= lastSetPoseTime_)
     {
-      cout << "out" << endl;
       return;
     }
     
@@ -805,7 +804,7 @@ namespace RobotLocalization
       PoseWithCovarianceStamped *posPtr = new PoseWithCovarianceStamped;
       posPtr->header = odom.header;
       posPtr->pose = odom.pose;
-      cout << "in" << endl;
+      cout << odom.pose.covariance[0] << endl;
       // PoseWithCovarianceStampedConstPtr pptr(posPtr);
       if (poseCallbackData.pose_use_child_frame_)
       {
@@ -1077,7 +1076,6 @@ namespace RobotLocalization
   {
     bool retVal = false;
 
-
     // 1. Get the measurement into a tf-friendly transform (pose) object
 
     Quaternion quat;
@@ -1093,6 +1091,7 @@ namespace RobotLocalization
     covariance.setZero();
     copyCovariance(&(msg.pose.covariance[0]), covariance, topicName, updateVector, POSITION_OFFSET, POSE_SIZE);
 
+    cout << covariance << endl;
     // 7i. Finally, copy everything into our measurement and covariance objects
     measurement(StateMemberX) = msg.pose.pose.position.x;
     measurement(StateMemberY) = msg.pose.pose.position.y;

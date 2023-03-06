@@ -329,6 +329,49 @@ std::pair<float,float> pure_pursuit_steer_control(State* state,TargetCourse traj
         return out_all;
     }
     
+
+void visualize()
+{
+    cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
+    cout << ".........in" << endl;
+    if(in.size()>999)
+    {
+        in.erase(in.begin());
+        in.push_back(10.0);
+        out.erase(out.begin());
+        out.push_back(5.0); 
+    }
+    else
+    {
+        in.push_back(10.0);
+        out.push_back(f5.0);
+    }
+
+    std::vector<cv::Point> pts;
+    std::vector<cv::Point> pts_1;
+    int i=0;
+    for(auto In:in)
+    {
+        pts.push_back(cv::Point(i,500+In*10));
+        i++;
+    }
+    i=0;
+    for(auto ou:out)
+    {
+        pts_1.push_back(cv::Point(i,500+ou*10));
+        i++;
+    }
+
+    cv::polylines(blueImage,pts,false,cv::Scalar(0,0,255),1,LINE_8);
+    cv::polylines(blueImage,pts_1,false,cv::Scalar(0,255,0),1,LINE_8);    
+    
+    debug_i++;
+
+    cv::imshow("Graph Plot", blueImage);
+    cv::waitKey(1);
+    blueImage = cv::Scalar(255,255,255);
+}
+
 std::vector<float> quaternion_from_euler(float roll,float pitch,float yaw)
 {
     
@@ -391,13 +434,13 @@ int main(int argc, char * argv[])
 
     double ref_m = atan2(cy[1] - cy[0], cx[1] - cx[0]);
     // cout << ref_m << endl;
-    cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
+    // cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
     
-    for (int i = 0; i < cx.size(); i++) {
-        cyaw.push_back(atan2(cy[i+1] - cy[i], cx[i+1] - cx[i]));
-        circle(blueImage, cv::Point(cx[i]*8+300,cy[i]*8+150), 5, Scalar(0, 0, 0), -1, LINE_8);
+    // for (int i = 0; i < cx.size(); i++) {
+    //     cyaw.push_back(atan2(cy[i+1] - cy[i], cx[i+1] - cx[i]));
+    //     circle(blueImage, cv::Point(cx[i]*8+300,cy[i]*8+150), 5, Scalar(0, 0, 0), -1, LINE_8);
 
-    }
+    // }
 
     for (int i = 0; i < cyaw.size()-7; i++) {
         auto cumum_sum =0.0;
@@ -430,6 +473,7 @@ int main(int argc, char * argv[])
     
     while(eCAL::Ok() &&  lastIndex-6 != index)
     {
+        visualize();
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
         if(gps_init)
         {
@@ -447,7 +491,7 @@ int main(int argc, char * argv[])
             index = out.first;
             two_points poin = getLFCpoint(cv::Point(state.x,state.y), cur_yaw, target_course.Lf);
             // cout<<"lf"<<target_course.Lf<<endl;
-            circle(blueImage, cv::Point(state.x*8+300,(state.y*8+150)), 5, Scalar(255, 0, 0), -1, LINE_8);
+            // circle(blueImage, cv::Point(state.x*8+300,(state.y*8+150)), 5, Scalar(255, 0, 0), -1, LINE_8);
             // circle(blueImage, cv::Point(poin.a.x*20+750,(poin.a.y*20+250)), 5, Scalar(0, 0, 255), -1, LINE_8);
             // circle(blueImage, cv::Point(poin.b.x*20+750,(poin.b.y*20+250)), 5, Scalar(255, 0, 0), -1, LINE_8);
             state.theroy(target_speed,out_last.first);
@@ -458,8 +502,8 @@ int main(int argc, char * argv[])
             auto now = std::chrono::high_resolution_clock::now();
             auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
             
-            // ctrl_cmd.linear_v = 1.0;   // kmph
-            // ctrl_cmd.steer = 1.0 ;   // degs
+            ctrl_cmd.linear_v = 1.0;   // kmph
+            ctrl_cmd.steer = 1.0 ;   // degs
             ctrl_cmd.time = nanoseconds/1e9;
             cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << "Lahead" << target_course.Lf << endl; 
             Serialize<ctrl> data;
@@ -467,8 +511,8 @@ int main(int argc, char * argv[])
             data.serialize(ctrl_cmd,ss);
             std::string temp = ss.str().data();
             out_control.Send(temp.c_str(), sizeof(temp));
-            cv::imshow("test",blueImage);
-            cv::waitKey(1);
+            // cv::imshow("test",blueImage);
+            // cv::waitKey(1);
         }
         
 

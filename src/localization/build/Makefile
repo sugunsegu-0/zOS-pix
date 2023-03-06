@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mz/Documents/zOS/src/localization
+CMAKE_SOURCE_DIR = /home/mz/Documents/sugun_zos/zOS-pix/src/localization
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mz/Documents/zOS/src/localization/build
+CMAKE_BINARY_DIR = /home/mz/Documents/sugun_zos/zOS-pix/src/localization/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -126,9 +126,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/zOS/src/localization/build/CMakeFiles /home/mz/Documents/zOS/src/localization/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/sugun_zos/zOS-pix/src/localization/build/CMakeFiles /home/mz/Documents/sugun_zos/zOS-pix/src/localization/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/zOS/src/localization/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/sugun_zos/zOS-pix/src/localization/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

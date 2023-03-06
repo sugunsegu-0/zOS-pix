@@ -29,10 +29,11 @@ int main(int argc, char *argv[])
     t.join();
     }
 
-    while (eCAL::Ok())
+    while (1)
     {   
         FEEDBACK feed = pix.feed_from_pix_control();
         pix.send_to_control(feed);
+        // pix.debug();
     }
 
     eCAL::Finalize();

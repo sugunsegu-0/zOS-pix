@@ -59,6 +59,10 @@ class vehicleIO
         scpp::SocketCan socket_can_read;
         std::shared_ptr<ctrl> frame;
         double iterator=0;
+        std::vector<double> in{0};
+        std::vector<double> out{0};
+        std::vector<cv::Point> tr;
+        int debug_i =0;
 
 };
 

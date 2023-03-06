@@ -1,6 +1,6 @@
 #include "vehicleio.hpp"
 #include "commons.hpp"
-
+using namespace cv;
 vehicleIO::vehicleIO()
 {   
     subscriber.reset(new eCAL::CSubscriber("ctrl"));
@@ -55,7 +55,7 @@ float vehicleIO::check(float val,float MAX_VAL)
     }
     return val;
 }
-
+cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
 void vehicleIO::debug()
 {
 
@@ -243,14 +243,14 @@ bool vehicleIO::write_vcu()
     return write_vcu_status;
 }
 
+
 FEEDBACK vehicleIO::feed_from_pix_control()
 {
+    std::cout<<"\n\nFeedback\n\n"<<std::endl;
     // for opencv
-    std::vector<double> x{0};
-    std::vector<double> y{0};
+    
 
     FEEDBACK feedback;
-
     std::shared_ptr<ctrl> feed_frame = frame;
     scpp::CanFrame fr;
     if (socket_can_read.open("can0") == scpp::STATUS_OK)
@@ -274,23 +274,11 @@ FEEDBACK vehicleIO::feed_from_pix_control()
             {
                 float vehicle_speed = input_parse(data,255*255,speedMinVal,speedMin,(speedMax*(-1)));
                 feedback.vehicle_speed = vehicle_speed;
+            
             }  
+
         }
     }
-
-    // open cv vizzz
-    cv::Mat1d xData(x);
-    cv::Mat1d yData(y);
-
-    cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(xData, yData);
-    plot->setPlotSize(1920, 1080);
-    cv::Mat display;
-    cv::putText(display,std::to_string(feedback.vehicle_speed),cv::Point(0,0),1,5,cv::Scalar(255,255,255),1,cv::LINE_8);
-    plot->render(display);
-
-    cv::imshow("Graph Plot", display);
-    cv::waitKey(1);
-    // open cv vizz
 
     if(feedback.vehicle_speed > (feed_frame->linear_v)){
        std::cout<< "\n****************** Vehicle is running faster than it should*******************\n"<<std::endl;

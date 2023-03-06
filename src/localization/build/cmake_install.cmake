@@ -1,4 +1,4 @@
-# Install script for directory: /home/mz/Documents/zOS/src/localization
+# Install script for directory: /home/mz/Documents/sugun_zos/zOS-pix/src/localization
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,12 +44,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/ekf_localization_node/ekf_localization_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/ekf_localization_node" TYPE EXECUTABLE FILES "/home/mz/Documents/zOS/src/localization/build/ekf_localization_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/ekf_localization_node" TYPE EXECUTABLE FILES "/home/mz/Documents/sugun_zos/zOS-pix/src/localization/build/ekf_localization_node")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/ekf_localization_node/ekf_localization_node" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/ekf_localization_node/ekf_localization_node")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/ekf_localization_node/ekf_localization_node"
-         OLD_RPATH "/home/mz/Documents/zOS/src/commons/build:"
+         OLD_RPATH "/home/mz/Documents/sugun_zos/zOS-pix/src/commons/build:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/ekf_localization_node/ekf_localization_node")
@@ -65,5 +65,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mz/Documents/zOS/src/localization/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/mz/Documents/sugun_zos/zOS-pix/src/localization/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
