@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/vehicleio.dir/src/main.cpp.o"
+  "CMakeFiles/vehicleio.dir/src/main.cpp.o.d"
   "CMakeFiles/vehicleio.dir/src/vehicleio.cpp.o"
+  "CMakeFiles/vehicleio.dir/src/vehicleio.cpp.o.d"
   "vehicleio"
   "vehicleio.pdb"
 )

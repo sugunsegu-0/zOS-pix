@@ -58,6 +58,8 @@ class vehicleIO
         scpp::SocketCan socket_can_write;
         scpp::SocketCan socket_can_read;
         std::shared_ptr<ctrl> frame;
+        double iterator=0;
+
 };
 
 #endif
