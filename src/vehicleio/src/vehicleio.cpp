@@ -58,8 +58,19 @@ float vehicleIO::check(float val,float MAX_VAL)
 
 void vehicleIO::debug()
 {
+    // double throttle_input;
+    // std::cin>>throttle_input;
+    // float output_val = input_parse(throttle_input,0,100,0,255);
+    // std::cout<<"throttle input -> "<< throttle_input <<"  "<< output_val<<std::endl;
+
+    int input_target = 0;
+    double correct_val = pid(input_target,feedback.linear_v);
+    correct_val = input_parse(correct_val,)
+
 
 }
+
+
 
 void vehicleIO::default_values_to_pix()
 {

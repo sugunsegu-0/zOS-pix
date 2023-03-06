@@ -24,15 +24,16 @@ int main(int argc, char *argv[])
     eCAL::Initialize(argc, argv, "VehicleIO");
     vehicleIO pix;
   
-    while(1){
-    thread t(foo,std::ref(pix));
-    t.join();
-    }
+    // while(1){
+    // thread t(foo,std::ref(pix));
+    // t.join();
+    // }
 
     while (eCAL::Ok())
     {   
-        FEEDBACK feed = pix.feed_from_pix_control();
-        pix.send_to_control(feed);
+        pix.debug();
+        // FEEDBACK feed = pix.feed_from_pix_control();
+        // pix.send_to_control(feed);
     }
 
     eCAL::Finalize();
