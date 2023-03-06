@@ -1,0 +1,34 @@
+mainn.o: mainn.c main.h v4l2_capture.h gstream.h image_capture.h \
+ recording_unit.h debug.h camera_common.h
+display_unit.o: display_unit.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h display_unit.h
+draw.o: draw.c
+image_capture.o: image_capture.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h
+device.o: device.c main.h v4l2_capture.h gstream.h image_capture.h \
+ recording_unit.h debug.h camera_common.h
+device.o: device.c main.h v4l2_capture.h gstream.h image_capture.h \
+ recording_unit.h debug.h camera_common.h
+camera_common.o: camera_common.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h display_unit.h
+debug.o: debug.c debug.h
+v4l2_capture.o: v4l2_capture.c debug.h main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h camera_common.h
+recording_unit.o: recording_unit.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h
+display_unit.o: display_unit.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h display_unit.h
+draw.o: draw.c
+image_capture.o: image_capture.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h
+device.o: device.c main.h v4l2_capture.h gstream.h image_capture.h \
+ recording_unit.h debug.h camera_common.h
+device.o: device.c main.h v4l2_capture.h gstream.h image_capture.h \
+ recording_unit.h debug.h camera_common.h
+camera_common.o: camera_common.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h display_unit.h
+debug.o: debug.c debug.h
+v4l2_capture.o: v4l2_capture.c debug.h main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h camera_common.h
+recording_unit.o: recording_unit.c main.h v4l2_capture.h gstream.h \
+ image_capture.h recording_unit.h debug.h camera_common.h

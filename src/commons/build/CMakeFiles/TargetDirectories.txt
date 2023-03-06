@@ -1,0 +1,3 @@
+/home/mz/Documents/zOS/src/commons/build/CMakeFiles/rebuild_cache.dir
+/home/mz/Documents/zOS/src/commons/build/CMakeFiles/edit_cache.dir
+/home/mz/Documents/zOS/src/commons/build/CMakeFiles/commons.dir

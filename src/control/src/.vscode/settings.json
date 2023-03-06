@@ -1,0 +1,11 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/minuszero/minuszero-ros-stack/install/ublox_msgs/lib/python3.8/site-packages",
+        "/home/minuszero/minuszero-ros-stack/install/robot_localization/lib/python3.8/site-packages",
+        "/home/minuszero/minuszero-ros-stack/install/minuszero_msgs/lib/python3.8/site-packages",
+        "/home/minuszero/minuszero-ros-stack/install/microstrain_inertial_rqt/lib/python3.8/site-packages",
+        "/home/minuszero/minuszero-ros-stack/install/microstrain_inertial_msgs/lib/python3.8/site-packages",
+        "/home/minuszero/minuszero-ros-stack/install/Pix_description/lib/python3.8/site-packages",
+        "/opt/ros/foxy/lib/python3.8/site-packages"
+    ]
+}
