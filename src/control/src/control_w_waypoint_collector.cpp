@@ -60,6 +60,8 @@ bool first_f = true;
 float prev_yaw = 0.0;
 float target_speed_max = 2 /3.6;
 float target_speed_min = 1.5 /3.6;
+float max_curvature;
+float min_curvature;
 
 
 std::vector<float> cx;
@@ -68,7 +70,7 @@ std::vector<float> cyaw;
 std::vector<float> curvature;
 int lastIndex;
 int index_path = 0;
-std::string path_for_waypoints = "/home/mz/Documents/zOS-pix/src/SAL/gps/src/path.txt";
+std::string path_for_waypoints = "/home/minuszero/dev/zOS-pix/src/SAL/gps/src/path.txt";
 
 
 
@@ -87,8 +89,11 @@ std::string control_to_vehicleio(float speed, float steer, int cur_index)
         ctrl_cmd.linear_v = 0.0;
         ctrl_cmd.steer = 0.0;
     }
-    ctrl_cmd.linear_v = 1.0;
-    ctrl_cmd.steer = 0.0;
+    
+    // only for testing
+    ctrl_cmd.linear_v = 1.0; // kmph
+    ctrl_cmd.steer = 0.0; // degs
+
     cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << endl; 
     Serialize<ctrl> data;
     std::stringstream ss;
@@ -140,7 +145,7 @@ void load_waypoints()
         cyaw.push_back(atan2(cy[i+1] - cy[i], cx[i+1] - cx[i]));
     }
 
-    for (int i = 0; i < cyaw.size()-7; i++) {
+    for (int i = 1; i < cyaw.size()-7; i++) {
         auto cumum_sum =0.0;
         for(int j = 0 ; j<5; j++)
             {
@@ -148,7 +153,10 @@ void load_waypoints()
                 cumum_sum=cumum_sum+abs(diff);
             }
         curvature.push_back(cumum_sum/5);
+        cout << cumum_sum/5 << endl;
     }
+    max_curvature = *max_element(curvature.begin(), curvature.end());
+    min_curvature = *min_element(curvature.begin(), curvature.end());
 }
 
 class State
@@ -170,16 +178,14 @@ class State
     {
         yaw=yaw_in;
         v=v_in;
-        rear_x = cx[0];
-        rear_y = cy[0];
         gps_odom_sub.AddReceiveCallback(std::bind(&State::Update,this,std::placeholders::_2));
         vehicle_feed_sub.AddReceiveCallback(std::bind(&State::plot_feed,this,std::placeholders::_2));
     }
 
     void theory(float vel,float delta)
     {
-        // x += vel * cos(yaw) * dt;
-        // y += vel * sin(yaw) * dt;
+        x += vel * cos(yaw) * dt;
+        y += vel * sin(yaw) * dt;
         yaw += vel / WB * tan(delta) * dt;
         v =  vel;
         rear_x = x - ((WB / 2) * cos(yaw));
@@ -239,25 +245,12 @@ class State
         Odometry odom;
         odom = data.deserialize(ss_odom_in,odom);
         
-        // cout << "callback: " << "x: " << odom.pose.pose.position.x << "y: " << odom.pose.pose.position.y << endl;
-
-        // x += vel * cos(yaw) * dt;
         x = odom.pose.pose.position.x;
-        // y += vel * sin(yaw) * dt;
         y = odom.pose.pose.position.y;
-        // if (gps_init){
-        //     yaw = atan2(y - prev_y, x - prev_x);
-        // }
-        // else{
-        //     yaw = 1.57;
-        // }
-        
         // yaw += vel / WB * tan(delta) * dt;
-        // v = odom.twist.twist.linear.x ;
-        // prev_x = x;
-        // prev_y = y;
-        // rear_x = x;
-        // rear_y = y;
+
+        rear_x = x - ((WB / 2) * cos(yaw));
+        rear_y = y - ((WB / 2) * sin(yaw));
 
         path.push_back(x);
         path.push_back(y);
@@ -291,7 +284,7 @@ class TargetCourse
     std::pair<int,float> search(State* state) 
     {
         int ind;
-        cout << "in" << endl;
+
         if (old_nearest_point_index==-1)
         {
             std::vector<float> dx;
@@ -325,9 +318,6 @@ class TargetCourse
             }
             old_nearest_point_index = ind;
             
-            // k = 1;
-            // Lfc = 1;
-
             k = 0.3;
             Lfc = 0.95;
 
@@ -407,15 +397,14 @@ int main(int argc, char * argv[])
     {
         // maintain hz
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-
         if(gps_init)
         {
             // Calculate Target Steer from pure_pursuit
             std::pair<float,float> out_last = pure_pursuit_steer_control(&state, target_course, out.first);
 
             // Calculate Target Speed from curvature of recorded path
-            float cur_yaw = curvature[0];
-            state.v  = (target_speed_max - (cur_yaw/0.2) * (target_speed_max - target_speed_min));
+            float cur_yaw = curvature[index_path];
+            state.v  = (target_speed_max - (cur_yaw/(max_curvature-min_curvature)) * (target_speed_max - target_speed_min));
 
             std::pair<int,float> out = target_course.search(&state);
             index_path = out.first;
@@ -428,7 +417,7 @@ int main(int argc, char * argv[])
             out_control.Send(pub.c_str(), sizeof(pub));
             
             // Visualize Pure Pursuit Tracking 
-            // visualize(state.x, state.y);
+            visualize(state.x, state.y);
         }
     }
 
