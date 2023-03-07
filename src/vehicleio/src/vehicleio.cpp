@@ -64,9 +64,9 @@ void vehicleIO::debug()
     // float output_val = input_parse(throttle_input,0,100,0,255);
     // std::cout<<"throttle input -> "<< throttle_input <<"  "<< output_val<<std::endl;
 
-    int input_target = 0;
-    double correct_val = pid(input_target,feedback.linear_v);
-    correct_val = input_parse(correct_val,)
+    // int input_target = 0;
+    // double correct_val = pid(input_target,feedback.linear_v);
+    // correct_val = input_parse(correct_val,)
 
 
 }
@@ -81,7 +81,7 @@ void vehicleIO::default_values_to_pix()
     gearTarget = 4; 
 }
 
-void vehicleIO::Pid
+// void vehicleIO::Pid
 
 
 void vehicleIO::send_to_pix()

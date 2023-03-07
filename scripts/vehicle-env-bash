@@ -1,0 +1,8 @@
+#!/bin/bash
+export ROOTDIR=$PWD
+cmake -B src/vehicleio/build \
+    -S ${ROOTDIR}/src/vehicleio/ \
+    -DROOTDIR=$ROOTDIR \
+    -DCMAKE_PREFIX_PATH=$ROOTDIR/src/vehicleio/socketcan-cpp/install/lib/cmake/socketcan_cpp
+
+make -C ${ROOTDIR}/src/vehicleio/build

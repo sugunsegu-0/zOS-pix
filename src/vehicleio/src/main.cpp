@@ -24,10 +24,7 @@ int main(int argc, char *argv[])
     eCAL::Initialize(argc, argv, "VehicleIO");
     vehicleIO pix;
   
-    // while(1){
-    // thread t(foo,std::ref(pix));
-    // t.join();
-    // }
+    thread t(foo,std::ref(pix));
 
     while (eCAL::Ok())
     {   
@@ -37,6 +34,7 @@ int main(int argc, char *argv[])
     }
 
     eCAL::Finalize();
+    t.join();
     
 
     return 0;
