@@ -75,31 +75,26 @@ path_for_waypoints = "/home/mz/Documents/sugun_zos/zOS-pix/src/SAL/gps/src/path.
 void control_to_vehicleio(float speed, float steer, int cur_index)
 {
     ctrl ctrl_cmd;
-    if (lastIndex > cur_index){
+    auto now = std::chrono::high_resolution_clock::now();
+    auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
 
+    ctrl_cmd.time = nanoseconds/1e9;
+    if (lastIndex > cur_index){
         ctrl_cmd.linear_v = state.v * 3.6;   // kmph
         ctrl_cmd.steer =  out_last.first * 180 / 3.14159265 ;   // degs
-
-        auto now = std::chrono::high_resolution_clock::now();
-        auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
-        ctrl_cmd.time = nanoseconds/1e9;
-    
     }
     else{
         double final_speed = 0.0;
         double final_steer = 0.0;
-        auto now = std::chrono::high_resolution_clock::now();
-        auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
-        ctrl_cmd.time = nanoseconds/1e9;
     }
     
-    
-    cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << "Lahead" << target_course.Lf << endl; 
+    cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << "L-ahead" << target_course.Lf << endl; 
     Serialize<ctrl> data;
     std::stringstream ss;
     data.serialize(ctrl_cmd,ss);
     std::string temp = ss.str().data();
     out_control.Send(temp.c_str(), sizeof(temp));
+
 }
 
 void visualize()
@@ -413,25 +408,25 @@ int main(int argc, char * argv[])
 
         if(gps_init)
         {
-
+            // Calculate Target Steer from pure_pursuit
             std::pair<float,float> out_last = pure_pursuit_steer_control(&state, target_course, out.first);
 
+            // Calculate Target Speed from curvature of recorded path
             float cur_yaw = curvature[index];
             state.v  = (target_speed_max - (cur_yaw/0.2) * (target_speed_max - target_speed_min));
 
             std::pair<int,float> out = target_course.search(&state);
             index = out.first;
 
-
+            // run theoritical ubdate for yaw calculation
             state.theory(state.v,out_last.first);
 
             // Publish control to vehicle io
-            control_to_vehicleio();
+            control_to_vehicleio(state.v,out_last.first, index);
 
             // Visualize Pure Pursuit Tracking 
             visualize();
         }
-        
     }
 
     cv::destroyAllWindows();
