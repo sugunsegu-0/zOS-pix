@@ -67,12 +67,12 @@ std::vector<float> cy;
 std::vector<float> cyaw;
 std::vector<float> curvature;
 int lastIndex;
-int index = 0;
-path_for_waypoints = "/home/mz/Documents/sugun_zos/zOS-pix/src/SAL/gps/src/path.txt";
+int index_path = 0;
+std::string path_for_waypoints = "/home/mz/Documents/zOS-pix/src/SAL/gps/src/path.txt";
 
 
 
-void control_to_vehicleio(float speed, float steer, int cur_index)
+std::string control_to_vehicleio(float speed, float steer, int cur_index)
 {
     ctrl ctrl_cmd;
     auto now = std::chrono::high_resolution_clock::now();
@@ -80,24 +80,26 @@ void control_to_vehicleio(float speed, float steer, int cur_index)
 
     ctrl_cmd.time = nanoseconds/1e9;
     if (lastIndex > cur_index){
-        ctrl_cmd.linear_v = state.v * 3.6;   // kmph
-        ctrl_cmd.steer =  out_last.first * 180 / 3.14159265 ;   // degs
+        ctrl_cmd.linear_v = speed * 3.6;   // kmph
+        ctrl_cmd.steer =  steer * 180 / 3.14159265 ;   // degs
     }
     else{
-        double final_speed = 0.0;
-        double final_steer = 0.0;
+        ctrl_cmd.linear_v = 0.0;
+        ctrl_cmd.steer = 0.0;
     }
-    
-    cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << "L-ahead" << target_course.Lf << endl; 
+    ctrl_cmd.linear_v = 1.0;
+    ctrl_cmd.steer = 0.0;
+    cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << endl; 
     Serialize<ctrl> data;
     std::stringstream ss;
     data.serialize(ctrl_cmd,ss);
     std::string temp = ss.str().data();
-    out_control.Send(temp.c_str(), sizeof(temp));
+
+    return temp;
 
 }
 
-void visualize()
+void visualize(float curr_x, float curr_y)
 {
     if (!visualize_init){
         for (int i = 0; i < cx.size(); i++) {
@@ -106,7 +108,7 @@ void visualize()
         visualize_init = true;
     }
     
-    circle(blueImage, cv::Point(state.x*8+300,(state.y*8+150)), 5, Scalar(255, 0, 0), -1, LINE_8);
+    circle(blueImage, cv::Point(curr_x*8+300,(curr_y*8+150)), 5, Scalar(255, 0, 0), -1, LINE_8);
     cv::imshow("test",blueImage);
     cv::waitKey(1);
 
@@ -147,7 +149,6 @@ void load_waypoints()
             }
         curvature.push_back(cumum_sum/5);
     }
-
 }
 
 class State
@@ -163,12 +164,14 @@ class State
     float prev_x = 0.0;
 
     eCAL::string::CSubscriber<std::string> gps_odom_sub{"gps/odom"};
-    eCAL::string::CSubscriber<std::string> vehicle_feed_sub{"vehicle-feed"};
+    eCAL::string::CSubscriber<std::string> vehicle_feed_sub{"pix_feedback"};
 
     State(float yaw_in=0,float v_in=0)
     {
         yaw=yaw_in;
         v=v_in;
+        rear_x = cx[0];
+        rear_y = cy[0];
         gps_odom_sub.AddReceiveCallback(std::bind(&State::Update,this,std::placeholders::_2));
         vehicle_feed_sub.AddReceiveCallback(std::bind(&State::plot_feed,this,std::placeholders::_2));
     }
@@ -185,7 +188,6 @@ class State
     
     void plot_feed(const std::string &msg)
     {   
-        std::cout<< "my code"<<std::endl;
         std::vector<double> in;
         std::vector<double> out;
         std::stringstream ss_fe_in(msg);
@@ -203,6 +205,7 @@ class State
         }
         else
         {
+            cout << out_data.vehicle_speed << endl;
             in.push_back(v);
             out.push_back(out_data.vehicle_speed);
         }
@@ -212,13 +215,13 @@ class State
         int i=0;
         for(auto In:in)
         {
-            pts.push_back(cv::Point(i,500+In*10));
+            pts.push_back(cv::Point(i,500+In*100));
             i++;
         }
         i=0;
         for(auto ou:out)
         {
-            pts_1.push_back(cv::Point(i,500+ou*10));
+            pts_1.push_back(cv::Point(i,500+ou*100));
             i++;
         }
 
@@ -253,8 +256,8 @@ class State
         // v = odom.twist.twist.linear.x ;
         // prev_x = x;
         // prev_y = y;
-        // rear_x = prev_x;
-        // rear_y = prev_y;
+        // rear_x = x;
+        // rear_y = y;
 
         path.push_back(x);
         path.push_back(y);
@@ -288,7 +291,7 @@ class TargetCourse
     std::pair<int,float> search(State* state) 
     {
         int ind;
-        
+        cout << "in" << endl;
         if (old_nearest_point_index==-1)
         {
             std::vector<float> dx;
@@ -300,12 +303,12 @@ class TargetCourse
             for(auto icx:cx)
                 dx.push_back(state->rear_x-icx);
 
-            
             for(int i = 0; i<dx.size();i++)
                 d.push_back(sqrt(pow(dx[i],2)+pow(dy[i],2)));
             ind = *min_element(d.begin(), d.end());
             
             old_nearest_point_index = ind;
+            cout << old_nearest_point_index << endl;
         }
         else
         {
@@ -392,8 +395,7 @@ int main(int argc, char * argv[])
     double ref_m = atan2(cy[1] - cy[0], cx[1] - cx[0]);
     float initial_speed = 0.0; 
     State state = State(ref_m, initial_speed); // State(x,y,yaw,v)
-
-    
+         
     // Initialize target course
     TargetCourse target_course = TargetCourse(cx, cy);
     std::pair<int,float> out = target_course.search(&state);
@@ -401,7 +403,7 @@ int main(int argc, char * argv[])
 
     lastIndex = cx.size() - 1;
     
-    while(eCAL::Ok() &&  lastIndex-6 != index)
+    while(eCAL::Ok() &&  lastIndex-6 != index_path)
     {
         // maintain hz
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
@@ -412,20 +414,21 @@ int main(int argc, char * argv[])
             std::pair<float,float> out_last = pure_pursuit_steer_control(&state, target_course, out.first);
 
             // Calculate Target Speed from curvature of recorded path
-            float cur_yaw = curvature[index];
+            float cur_yaw = curvature[0];
             state.v  = (target_speed_max - (cur_yaw/0.2) * (target_speed_max - target_speed_min));
 
             std::pair<int,float> out = target_course.search(&state);
-            index = out.first;
+            index_path = out.first;
 
             // run theoritical ubdate for yaw calculation
             state.theory(state.v,out_last.first);
 
             // Publish control to vehicle io
-            control_to_vehicleio(state.v,out_last.first, index);
-
+            auto pub = control_to_vehicleio(state.v,out_last.first, out.first);
+            out_control.Send(pub.c_str(), sizeof(pub));
+            
             // Visualize Pure Pursuit Tracking 
-            visualize();
+            // visualize(state.x, state.y);
         }
     }
 

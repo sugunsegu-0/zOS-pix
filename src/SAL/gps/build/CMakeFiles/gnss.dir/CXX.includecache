@@ -12,9 +12,19 @@ math.h
 Eigen/Dense
 -
 
-/home/mz/Documents/zOS/src/SAL/gps/include/gpsd_config.h
+../include/gpsd_config.h
 
-/home/mz/Documents/zOS/src/SAL/gps/src/gnss.cpp
+../include/libgpsmm.h
+sys/types.h
+-
+gps.h
+../include/gps.h
+QtCore/qglobal.h
+-
+
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/gpsd_config.h
+
+/home/mz/Documents/zOS-pix/src/SAL/gps/src/gnss.cpp
 ctime
 -
 iomanip
@@ -28,7 +38,7 @@ math.h
 signal.h
 -
 ../include/gpsd_config.h
-/home/mz/Documents/zOS/src/SAL/gps/include/gpsd_config.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/gpsd_config.h
 ctype.h
 -
 curses.h
@@ -54,23 +64,23 @@ time.h
 unistd.h
 -
 ../include/gps.h
-/home/mz/Documents/zOS/src/SAL/gps/include/gps.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/gps.h
 ../include/gps_json.h
-/home/mz/Documents/zOS/src/SAL/gps/include/gps_json.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/gps_json.h
 ../include/compiler.h
-/home/mz/Documents/zOS/src/SAL/gps/include/compiler.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/compiler.h
 ../include/gpsdclient.h
-/home/mz/Documents/zOS/src/SAL/gps/include/gpsdclient.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/gpsdclient.h
 ../include/os_compat.h
-/home/mz/Documents/zOS/src/SAL/gps/include/os_compat.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/os_compat.h
 ../include/timespec.h
-/home/mz/Documents/zOS/src/SAL/gps/include/timespec.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/include/timespec.h
 commons.hpp
 -
 gps_to_pose_conversion_node.hpp
-/home/mz/Documents/zOS/src/SAL/gps/src/gps_to_pose_conversion_node.hpp
+/home/mz/Documents/zOS-pix/src/SAL/gps/src/gps_to_pose_conversion_node.hpp
 
-/home/mz/Documents/zOS/src/SAL/gps/src/gps_to_pose_conversion_node.hpp
+/home/mz/Documents/zOS-pix/src/SAL/gps/src/gps_to_pose_conversion_node.hpp
 ecal/ecal.h
 -
 ecal/msg/string/publisher.h
@@ -82,13 +92,23 @@ geodetic_conv.hpp
 localization/localizationDS.hpp
 -
 commons.hpp
-/home/mz/Documents/zOS/src/SAL/gps/src/commons.hpp
+/home/mz/Documents/zOS-pix/src/SAL/gps/src/commons.hpp
 bits/stdc++.h
 -
 thread
 -
 iostream
 -
+
+/home/mz/Documents/zOS-pix/src/SAL/gps/src/libgpsmm.cpp
+gpsd_config.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/src/gpsd_config.h
+assert.h
+-
+cstdlib
+-
+libgpsmm.h
+/home/mz/Documents/zOS-pix/src/SAL/gps/src/libgpsmm.h
 
 /home/mz/Downloads/gpsd-3.22/include/compiler.h
 atomic

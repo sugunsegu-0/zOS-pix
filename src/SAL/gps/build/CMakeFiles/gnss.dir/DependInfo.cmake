@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/mz/Documents/zOS/src/SAL/gps/src/gnss.cpp" "/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/gnss.dir/src/gnss.cpp.o"
-  "/home/mz/Documents/zOS/src/SAL/gps/src/libgpsmm.cpp" "/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/gnss.dir/src/libgpsmm.cpp.o"
+  "/home/mz/Documents/zOS-pix/src/SAL/gps/src/gnss.cpp" "/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/gnss.dir/src/gnss.cpp.o"
+  "/home/mz/Documents/zOS-pix/src/SAL/gps/src/libgpsmm.cpp" "/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/gnss.dir/src/libgpsmm.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

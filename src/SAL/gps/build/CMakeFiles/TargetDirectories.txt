@@ -1,7 +1,7 @@
-/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/install/strip.dir
-/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/install/local.dir
-/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/install.dir
-/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/list_install_components.dir
-/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/rebuild_cache.dir
-/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/edit_cache.dir
-/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles/gnss.dir
+/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/install/strip.dir
+/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/install/local.dir
+/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/install.dir
+/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/list_install_components.dir
+/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/rebuild_cache.dir
+/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/edit_cache.dir
+/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/gnss.dir

@@ -44,10 +44,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mz/Documents/zOS/src/SAL/gps
+CMAKE_SOURCE_DIR = /home/mz/Documents/zOS-pix/src/SAL/gps
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mz/Documents/zOS/src/SAL/gps/build
+CMAKE_BINARY_DIR = /home/mz/Documents/zOS-pix/src/SAL/gps/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -74,14 +74,14 @@ clean: CMakeFiles/gnss.dir/clean
 CMakeFiles/gnss.dir/all:
 	$(MAKE) -f CMakeFiles/gnss.dir/build.make CMakeFiles/gnss.dir/depend
 	$(MAKE) -f CMakeFiles/gnss.dir/build.make CMakeFiles/gnss.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles --progress-num=1,2,3 "Built target gnss"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles --progress-num=1,2,3 "Built target gnss"
 .PHONY : CMakeFiles/gnss.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/gnss.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/gnss.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/zOS/src/SAL/gps/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles 0
 .PHONY : CMakeFiles/gnss.dir/rule
 
 # Convenience name for target.

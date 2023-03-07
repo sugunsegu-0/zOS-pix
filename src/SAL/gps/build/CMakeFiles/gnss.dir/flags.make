@@ -6,5 +6,5 @@ CXX_FLAGS = -g   -Wall -Wextra -Wpedantic -std=gnu++17
 
 CXX_DEFINES = -DASIO_DISABLE_VISIBILITY -DASIO_STANDALONE -DBOOST_ALL_NO_LIB -DBOOST_IOSTREAMS_DYN_LINK -DBOOST_SERIALIZATION_DYN_LINK
 
-CXX_INCLUDES = -I/home/mz/Documents/zOS/src/SAL/gps/include -I/usr/include/eigen3 -I/home/mz/zOS/src/commons -I/home/mz/Downloads/gpsd-3.22/include -I/home/mz/zOS/src/data-structures/include 
+CXX_INCLUDES = -I/home/mz/Documents/zOS-pix/src/SAL/gps/include -I/usr/include/eigen3 -I/home/mz/zOS/src/commons -I/home/mz/Downloads/gpsd-3.22/include -I/home/mz/zOS/src/data-structures/include 
 
