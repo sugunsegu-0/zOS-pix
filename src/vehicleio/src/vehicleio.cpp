@@ -59,8 +59,19 @@ float vehicleIO::check(float val,float MAX_VAL)
 cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
 void vehicleIO::debug()
 {
+    // double throttle_input;
+    // std::cin>>throttle_input;
+    // float output_val = input_parse(throttle_input,0,100,0,255);
+    // std::cout<<"throttle input -> "<< throttle_input <<"  "<< output_val<<std::endl;
+
+    int input_target = 0;
+    double correct_val = pid(input_target,feedback.linear_v);
+    correct_val = input_parse(correct_val,)
+
 
 }
+
+
 
 void vehicleIO::default_values_to_pix()
 {
@@ -69,6 +80,9 @@ void vehicleIO::default_values_to_pix()
     // forward gear engaged
     gearTarget = 4; 
 }
+
+void vehicleIO::Pid
+
 
 void vehicleIO::send_to_pix()
 {            
