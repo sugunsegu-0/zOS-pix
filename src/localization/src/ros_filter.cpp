@@ -138,9 +138,9 @@ namespace RobotLocalization
       differential, relative, false, accelMahalanobisThresh);
 
 
-    eCAL::string::CSubscriber<std::string> imu_data_sub("imu/data");
-    imu_data_sub.AddReceiveCallback(std::bind(&RosFilter::imuCallback, this, std::placeholders::_2,
-                imuTopicName, imu_poseCallbackData, imu_twistCallbackData, imu_accelCallbackData));
+    // eCAL::string::CSubscriber<std::string> imu_data_sub("imu/data");
+    // imu_data_sub.AddReceiveCallback(std::bind(&RosFilter::imuCallback, this, std::placeholders::_2,
+    //             imuTopicName, imu_poseCallbackData, imu_twistCallbackData, imu_accelCallbackData));
 
     // Initialize imu/data topic 
     differential = false;
@@ -176,21 +176,21 @@ namespace RobotLocalization
       ekf_odom_pub.Send(ser_odom_msg);
 
       cout << std::setprecision(8) << std::fixed << endl;  // set output to fixed floating point, 8 decimal precision
-      cout << "stamp " << filteredPosition.header.time<< endl;
-      cout << "frame_id " << filteredPosition.header.frame_id << endl;
-      cout << "x "  << filteredPosition.pose.pose.position.x << endl;
-      cout << "y "  << filteredPosition.pose.pose.position.y << endl;
-      cout << "z "  << filteredPosition.pose.pose.position.z << endl;
-      cout << "qx "  << filteredPosition.pose.pose.orientation.x << endl;
-      cout << "qy"  << filteredPosition.pose.pose.orientation.y << endl;
-      cout << "qz"  << filteredPosition.pose.pose.orientation.z << endl;
-      cout << "qw"  << filteredPosition.pose.pose.orientation.w << endl;
-      cout << "position_covariance "  << filteredPosition.pose.covariance[0] << "," << filteredPosition.pose.covariance[4] << "," << filteredPosition.pose.covariance[8] << endl;
-      cout << "..................... " << endl;
+      // cout << "stamp " << filteredPosition.header.time<< endl;
+      // cout << "frame_id " << filteredPosition.header.frame_id << endl;
+      // cout << "x "  << filteredPosition.pose.pose.position.x << endl;
+      // cout << "y "  << filteredPosition.pose.pose.position.y << endl;
+      // cout << "z "  << filteredPosition.pose.pose.position.z << endl;
+      // cout << "qx "  << filteredPosition.pose.pose.orientation.x << endl;
+      // cout << "qy"  << filteredPosition.pose.pose.orientation.y << endl;
+      // cout << "qz"  << filteredPosition.pose.pose.orientation.z << endl;
+      // cout << "qw"  << filteredPosition.pose.pose.orientation.w << endl;
+      // cout << "position_covariance "  << filteredPosition.pose.covariance[0] << "," << filteredPosition.pose.covariance[4] << "," << filteredPosition.pose.covariance[8] << endl;
+      // cout << "..................... " << endl;
 
       auto end = std::chrono::system_clock::now();
       std::chrono::duration<double> diff = end - start;
-      cout << "Time to process last frame (seconds): " << diff.count() << " FPS: " << 1.0 / diff.count()  << endl;;
+      // cout << "Time to process last frame (seconds): " << diff.count() << " FPS: " << 1.0 / diff.count()  << endl;;
 
     }
 
@@ -781,20 +781,25 @@ namespace RobotLocalization
   void RosFilter<T>::odometryCallback(const std::string &msg, const std::string &topicName,
     const CallbackData &poseCallbackData, const CallbackData &twistCallbackData)
   {
-    // If we've just reset the filter, then we want to ignore any messages
-    // that arrive with an older timestamp
-    
-    
+
+    cout << msg << endl;
     std::stringstream ss_odom_in(msg);
     Serialize<Odometry> data;
     Odometry odom;
     odom = data.deserialize(ss_odom_in,odom);
-    // cout << "...................................topicName: " << topicName << endl;
+
+    cout << "in" << endl;
+
+    // If we've just reset the filter, then we want to ignore any messages
+    // that arrive with an older timestamp
     if (odom.header.time <= lastSetPoseTime_)
     {
+      cout << "The " << topicName << " message has a timestamp equal to or before the last filter reset, " <<
+                "this message will be ignored. This may indicate an empty or bad timestamp. (message time: " <<
+                 ")" << endl;
       return;
     }
-    
+
     PoseWithCovarianceStamped posPtr;
 
     if (poseCallbackData.updateSum_ > 0)

@@ -81,7 +81,7 @@ std::string control_to_vehicleio(float speed, float steer, int cur_index)
     auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count();
 
     ctrl_cmd.time = nanoseconds/1e9;
-    if (lastIndex > cur_index){
+    if (lastIndex-6 > cur_index){
         ctrl_cmd.linear_v = speed * 3.6;   // kmph
         ctrl_cmd.steer =  steer * 180 / 3.14159265 ;   // degs
     }
@@ -89,10 +89,10 @@ std::string control_to_vehicleio(float speed, float steer, int cur_index)
         ctrl_cmd.linear_v = 0.0;
         ctrl_cmd.steer = 0.0;
     }
-    
-    // only for testing
-    // ctrl_cmd.linear_v = 1.0; // kmph
-    // ctrl_cmd.steer = 0.0; // degs
+
+    // Just for testing
+    // ctrl_cmd.linear_v = 1.0;
+    // ctrl_cmd.steer = 0.0;
 
     cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << endl; 
     Serialize<ctrl> data;
@@ -178,6 +178,8 @@ class State
     {
         yaw=yaw_in;
         v=v_in;
+        rear_x = cx[0];
+        rear_y = cy[0];
         gps_odom_sub.AddReceiveCallback(std::bind(&State::Update,this,std::placeholders::_2));
         vehicle_feed_sub.AddReceiveCallback(std::bind(&State::plot_feed,this,std::placeholders::_2));
     }
@@ -245,12 +247,17 @@ class State
         Odometry odom;
         odom = data.deserialize(ss_odom_in,odom);
         
-        x = odom.pose.pose.position.x;
-        y = odom.pose.pose.position.y;
-        // yaw += vel / WB * tan(delta) * dt;
+        // cout << "callback: " << "x: " << odom.pose.pose.position.x << "y: " << odom.pose.pose.position.y << endl;
 
-        rear_x = x - ((WB / 2) * cos(yaw));
-        rear_y = y - ((WB / 2) * sin(yaw));
+        // x += vel * cos(yaw) * dt;
+        x = odom.pose.pose.position.x;
+        // y += vel * sin(yaw) * dt;
+        y = odom.pose.pose.position.y;
+        
+        // yaw += vel / WB * tan(delta) * dt;
+        // v = odom.twist.twist.linear.x ;
+        // rear_x = x - ((WB / 2) * cos(yaw));
+        // rear_y = y - ((WB / 2) * sin(yaw));
 
         path.push_back(x);
         path.push_back(y);
@@ -363,6 +370,7 @@ std::pair<float,float> pure_pursuit_steer_control(State* state,TargetCourse traj
     float alpha = atan2(ty - state->rear_y, tx - state->rear_x) - state->yaw;
 
     float delta = atan2(2.0 * WB * sin(alpha) / Lf, 1.0);
+
     std::pair<float,float> out_all{delta,ind};
     return out_all;
 };
@@ -397,7 +405,7 @@ int main(int argc, char * argv[])
     {
         // maintain hz
         std::this_thread::sleep_for(std::chrono::milliseconds(rest));
-        if(gps_init)
+        if(true)
         {
             // Calculate Target Steer from pure_pursuit
             std::pair<float,float> out_last = pure_pursuit_steer_control(&state, target_course, out.first);
