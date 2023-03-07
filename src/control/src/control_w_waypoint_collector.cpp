@@ -58,7 +58,7 @@ list<double> path;
 
 bool first_f = true;
 float prev_yaw = 0.0;
-float target_speed_max = 2 /3.6;
+float target_speed_max = 5 /3.6;
 float target_speed_min = 1.5 /3.6;
 float max_curvature;
 float min_curvature;
@@ -91,8 +91,8 @@ std::string control_to_vehicleio(float speed, float steer, int cur_index)
     }
     
     // only for testing
-    ctrl_cmd.linear_v = 1.0; // kmph
-    ctrl_cmd.steer = 0.0; // degs
+    // ctrl_cmd.linear_v = 1.0; // kmph
+    // ctrl_cmd.steer = 0.0; // degs
 
     cout << "Command: speed " << ctrl_cmd.linear_v << ", steer " << ctrl_cmd.steer << endl; 
     Serialize<ctrl> data;
