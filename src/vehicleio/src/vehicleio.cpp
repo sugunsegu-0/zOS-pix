@@ -1,7 +1,6 @@
 #include "vehicleio.hpp"
 #include "commons.hpp"
 
-using namespace cv;
 vehicleIO::vehicleIO()
 {   
     subscriber.reset(new eCAL::CSubscriber("ctrl"));
@@ -50,13 +49,13 @@ ctrl vehicleIO::parse_data(char* buffer)
 
 float vehicleIO::check(float val,float MAX_VAL)
 {
-    if(val>MAX_VAL){
+    if(abs(val)>MAX_VAL){
         // error slow the the car
         return 0;
     }
     return val;
 }
-cv::Mat blueImage(1000, 1000, CV_8UC3, Scalar(255, 255, 255));
+
 void vehicleIO::debug()
 {
     // double throttle_input;
@@ -95,6 +94,7 @@ void vehicleIO::send_to_pix()
     std::shared_ptr<ctrl> new_frame = frame;
     
     if(time_nano-(new_frame->time) >= 0.1)
+    // if(1>2)
     {
         throttle_value = 0;
         steering_angle = 0;
@@ -115,7 +115,7 @@ void vehicleIO::send_to_pix()
                 init_flag = true;
                 break;
             case(1):
-                throttle_value = check(new_frame->linear_v,3);
+                throttle_value = check(new_frame->linear_v,20);
                 steering_angle = new_frame->steer;
                 break;
         }
@@ -137,14 +137,41 @@ void vehicleIO::send_to_pix()
             write_vcu();
         
         // throttle value send
-        throttle_value = absolute(throttle_value,least_count_throttle);
-        std::cout <<" Throttle "<< throttle_value << " ";
-        while(write_throttle(throttle_value) !=  scpp::STATUS_OK)
-            write_throttle(throttle_value);
+        throttle_value = PID(throttle_value,feedback.vehicle_speed,time_nano);
+
+        if(throttle_value>=0){
+            if (throttle_value>100){
+                throttle_value = 100;
+            }
+            throttle_pedal_target = input_parse(throttle_value,0,100,0,255);
+            brake_pedal_target  = 0;
+        }
+        else{
+            if (throttle_value<-100){
+                throttle_value = -100;
+            }
+            brake_pedal_target = input_parse(abs(throttle_value),0,100,0,255);
+            throttle_pedal_target = 0;
+        }
+
+        while(write_throttle_pedal(throttle_pedal_target) !=  scpp::STATUS_OK)
+            write_throttle_pedal(throttle_pedal_target);
+
+        while(write_brake_pedal(brake_pedal_target) !=  scpp::STATUS_OK)
+            write_brake_pedal(brake_pedal_target);
+
+        // throttle_value = check(throttle_value,150);
+        // throttle_value = absolute(throttle_value,least_count_throttle);
+        // // std::cout <<" Throttle "<< throttle_value << " ";
+        // while(write_throttle(throttle_value,throttle_pedal_target) !=  scpp::STATUS_OK)
+        //     write_throttle(throttle_value,throttle_pedal_target);
                 
+        
+
+
         // steer value send
         steering_angle = absolute(steering_angle, least_count_steering);
-        std::cout <<" Steer "<< steering_angle << " ";
+        // std::cout <<" Steer "<< steering_angle << " ";
         while(write_steering_angle(steering_angle) !=  scpp::STATUS_OK)
             write_steering_angle(steering_angle);
     }
@@ -154,7 +181,7 @@ void vehicleIO::send_to_pix()
 }
 
 bool vehicleIO::write_steering_angle(float steering_angle)
-{
+{   
     Steering_Command.data[0] = steerEnCtrl;
     Steering_Command.data[1] = steerAngleSpeed;
     Steering_Command.data[2] = 0;
@@ -174,6 +201,47 @@ bool vehicleIO::write_steering_angle(float steering_angle)
     auto write_steering_status = socket_can_write.write(cf_to_write_steer);
     return write_steering_status;
 
+}
+
+bool vehicleIO::write_brake_pedal(float brake_pedal_target)
+{
+    Brake_Command.data[0] = brakeEnCtrl;
+    Brake_Command.data[1] = brakeDec;
+    Brake_Command.data[2] = 0;
+    Brake_Command.data[3] = 0;
+    Brake_Command.data[4] = brake_pedal_target;
+    Brake_Command.data[5] = 0;
+    Brake_Command.data[6] = 0;
+    Brake_Command.data[7] = driveCheckSum;
+
+    scpp::CanFrame cf_to_write_brake;
+    cf_to_write_brake.id = t_brakeCanID;
+    cf_to_write_brake.len = 8;
+    for (int i = 0; i < 8; ++i)
+        cf_to_write_brake.data[i] = Brake_Command.data[i];
+    auto write_brake_status = socket_can_write.write(cf_to_write_brake);
+    return write_brake_status;
+}
+
+bool vehicleIO::write_throttle_pedal(float throttle_pedal_target)
+{
+    Throttle_Command.data[0] = driveEnCtrl;
+    Throttle_Command.data[1] = driveAcc;
+    Throttle_Command.data[2] = 0;
+    Throttle_Command.data[3] = 0;
+    Throttle_Command.data[4] = throttle_pedal_target;
+    // int throttle_send_initial = round(input_parse(throttle_value,0,speedMaxLimit,0,ThrottleMaxVal));
+    Throttle_Command.data[5] = 0;
+    Throttle_Command.data[6] = 0;
+    Throttle_Command.data[7] = driveCheckSum;
+
+    scpp::CanFrame cf_to_write_throttle;
+    cf_to_write_throttle.id = t_throttleCanID;
+    cf_to_write_throttle.len = 8;
+    for (int i = 0; i < 8; ++i)
+        cf_to_write_throttle.data[i] = Throttle_Command.data[i];
+    auto write_throttle_status = socket_can_write.write(cf_to_write_throttle);
+    return write_throttle_status;
 }
 
 bool vehicleIO::write_throttle(float throttle_value)
@@ -265,7 +333,7 @@ FEEDBACK vehicleIO::feed_from_pix_control()
 
     std::shared_ptr<ctrl> feed_frame = frame;
     
-    FEEDBACK feedback;
+    // FEEDBACK feedback;
     scpp::CanFrame fr;
     if (socket_can_read.open("can0") == scpp::STATUS_OK)
     {
@@ -275,6 +343,7 @@ FEEDBACK vehicleIO::feed_from_pix_control()
             int data = fr.data[3]*255 + fr.data[4];
             float steering_angle = input_parse(data,0,(steerMaxVal-1),-30,30);
             feedback.steering_angle = steering_angle;
+            // feed->steering_angle = steering_angle;
         }
         if(fr.id == r_vcuCanID)
         {
@@ -283,11 +352,14 @@ FEEDBACK vehicleIO::feed_from_pix_control()
             {
                 float vehicle_speed = input_parse(data,0,speedMaxVal,speedMin,speedMax);
                 feedback.vehicle_speed = vehicle_speed;
+                // feed->vehicle_speed = vehicle_speed;
             }
             else
             {
                 float vehicle_speed = input_parse(data,255*255,speedMinVal,speedMin,(speedMax*(-1)));
                 feedback.vehicle_speed = vehicle_speed;
+                // feed->vehicle_speed = vehicle_speed;
+
             
             }  
 
@@ -300,8 +372,38 @@ FEEDBACK vehicleIO::feed_from_pix_control()
     //debug this
     socket_can_read.close();
     }
+    
     return feedback;
 }
+
+double vehicleIO::PID(double target_speed,double feed_speed,double time)
+{
+    double kp = 60;
+    double ki= 0;
+    double kd= 0;
+    double correct_tar = 0;
+    double error = target_speed - feed_speed;
+    // i_error +=error;
+    // if(p_error == -1000){
+    //     std::cout << ">>>>>>>>> FIRST" << std::endl;
+    //     correct_tar = (kp*error);
+    //     feedback.pid_error = error;
+    //     p_error = error;
+    //     p_time = time;
+    //     feedback.pid_target = correct_tar;
+    //     return correct_tar;
+    // }
+    
+    // double d_error = (error - p_error )/(time - p_time);
+    std::cout << ">>>>>>>>> NEXT" << std::endl;
+    correct_tar = (kp*error); // + (kd*d_error); // (ki*i_error);
+    feedback.pid_error = error;
+    p_error = error;
+    p_time = time;
+    feedback.pid_target = correct_tar;
+    return correct_tar;
+}
+
 
 void vehicleIO::send_to_control(FEEDBACK feed)
 {

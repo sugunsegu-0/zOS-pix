@@ -29,6 +29,10 @@ class vehicleIO
         void default_values_to_pix();
         bool write_steering_angle(float steering_angle);
         bool write_throttle(float throttle_value);
+        bool write_throttle_pedal(float throttle_pedal_target);
+        bool write_brake_pedal(float brake_pedal_target);
+
+
         bool write_gear(float gearTarget);
         bool write_park(float parkTarget);
         bool write_vcu();
@@ -36,6 +40,8 @@ class vehicleIO
         std::unique_ptr<eCAL::string::CPublisher<std::string>> publisher;
         void send_to_control(FEEDBACK feed);
         float check(float val,float MAX_VAL);
+        double PID(double target_speed,double feed_speed,double time);
+
 
     private:
         
@@ -44,6 +50,7 @@ class vehicleIO
         CAN_MSG Park_Command;
         CAN_MSG Gear_Command;
         CAN_MSG Vehicle_Command;
+        CAN_MSG Brake_Command;
         // ------------------------- MAIN CONTROL VARIABLE DEFAULT VALUES ------------------
         float steering_angle = 0; // -30 to 30
         float throttle_value = 0;      // 0 to 255
@@ -58,12 +65,14 @@ class vehicleIO
         scpp::SocketCan socket_can_write;
         scpp::SocketCan socket_can_read;
         std::shared_ptr<ctrl> frame;
-        double iterator=0;
-        std::vector<double> in{0};
-        std::vector<double> out{0};
-        std::vector<cv::Point> tr;
-        int debug_i =0;
+        double p_error = -1000;
+        double i_error=0;
+        double p_time;
+        int brake_pedal_target=0;
+        int throttle_pedal_target=0;
 
+        FEEDBACK feedback;
+        std::shared_ptr<FEEDBACK> feed;
 
 };
 

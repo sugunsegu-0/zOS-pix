@@ -70,7 +70,11 @@ const int brakeMinInput2 = 0;
 // # VCU COMMAND
 const int headlightCtrl = 7;
 const int vehicleVINReq = 1;
-const int driveModeCtrl = 1;
+//for speed mode
+// const int driveModeCtrl = 1;
+// for throttle mode
+const int driveModeCtrl = 0;
+
 const int steerModeCtrl = 0;
 const int vehicleModeCheckSum = 0;
 
@@ -96,7 +100,7 @@ const int brakeCheckSum = 0;
 
 // # THROTTLE COMMAND
 const int driveEnCtrl = 1;
-const int driveAcc = 1;
+const int driveAcc = 10;
 const int driveThrottlePedalTarget = 0;
 const int driveSpeedTarget = 10;
 const int driveCheckSum = 0;
@@ -108,7 +112,7 @@ const float steerMaxVal = 997;
 const float speedMaxVal = (speedMaxInput1*255) + speedMaxInput2;
 const float speedMinVal = (speedMinInput1*255) + speedMinInput2;
 const float brakeMaxVal = (brakeMaxInput1 * 255) + brakeMaxInput2;
-const float least_count_steering = 0.06;
+const float least_count_steering = 0.12;
 const float least_count_throttle = 0.61;
 /*---------------------------Limits--------------------*/
 
