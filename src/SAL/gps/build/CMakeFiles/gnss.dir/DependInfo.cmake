@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/mz/Documents/zOS-pix/src/SAL/gps/src/gnss.cpp" "/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/gnss.dir/src/gnss.cpp.o"
-  "/home/mz/Documents/zOS-pix/src/SAL/gps/src/libgpsmm.cpp" "/home/mz/Documents/zOS-pix/src/SAL/gps/build/CMakeFiles/gnss.dir/src/libgpsmm.cpp.o"
+  "/home/mzjet/work/zOS-pix/src/SAL/gps/src/gnss.cpp" "/home/mzjet/work/zOS-pix/src/SAL/gps/build/CMakeFiles/gnss.dir/src/gnss.cpp.o"
+  "/home/mzjet/work/zOS-pix/src/SAL/gps/src/libgpsmm.cpp" "/home/mzjet/work/zOS-pix/src/SAL/gps/build/CMakeFiles/gnss.dir/src/libgpsmm.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -13,18 +13,19 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_TARGET_DEFINITIONS_CXX
   "ASIO_DISABLE_VISIBILITY"
   "ASIO_STANDALONE"
-  "BOOST_ALL_NO_LIB"
   "BOOST_IOSTREAMS_DYN_LINK"
+  "BOOST_IOSTREAMS_NO_LIB"
   "BOOST_SERIALIZATION_DYN_LINK"
+  "BOOST_SERIALIZATION_NO_LIB"
   )
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include"
   "/usr/include/eigen3"
-  "/home/mz/zOS/src/commons"
-  "/home/mz/Downloads/gpsd-3.22/include"
-  "/home/mz/zOS/src/data-structures/include"
+  "/home/mzjet/work/zOS-pix/src/commons"
+  "/home/mzjet/dev/gpsd-3.25/include"
+  "/home/mzjet/work/zOS-pix/src/data-structures/include"
   )
 
 # Targets to which this target links.

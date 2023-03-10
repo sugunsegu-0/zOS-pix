@@ -1,4 +1,4 @@
-# Install script for directory: /home/mz/Documents/zOS-pix/src/SAL/gps
+# Install script for directory: /home/mzjet/work/zOS-pix/src/SAL/gps
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,12 +44,12 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/gnss/gnss"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/gnss" TYPE EXECUTABLE FILES "/home/mz/Documents/zOS-pix/src/SAL/gps/build/gnss")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/gnss" TYPE EXECUTABLE FILES "/home/mzjet/work/zOS-pix/src/SAL/gps/build/gnss")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/gnss/gnss" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/gnss/gnss")
     file(RPATH_CHANGE
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/gnss/gnss"
-         OLD_RPATH "/home/mz/zOS/src/commons/build:/usr/local/lib:"
+         OLD_RPATH "/usr/local/lib:/home/mzjet/work/zOS-pix/BUILD/commons:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/gnss/gnss")
@@ -65,5 +65,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/mz/Documents/zOS-pix/src/SAL/gps/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/mzjet/work/zOS-pix/src/SAL/gps/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

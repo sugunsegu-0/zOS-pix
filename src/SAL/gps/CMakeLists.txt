@@ -44,8 +44,8 @@ target_include_directories(${PROJECT_NAME}
   ${commons_INCLUDE_DIR}
   # ${GPSMM}
   ${GPS_INCLUDE_DIR}
-  "/home/mz/Downloads/gpsd-3.22/include"
-  "/home/mz/zOS/src/data-structures/include"
+  "/home/mzjet/dev/gpsd-3.25/include"
+  "/home/mzjet/work/zOS-pix/src/data-structures/include"
 
  )
 # PROTOBUF_TARGET_CPP(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/proto/ ${protobuf_files})

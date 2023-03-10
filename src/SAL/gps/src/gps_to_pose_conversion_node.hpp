@@ -48,7 +48,7 @@ double prev_y=0.0;
 double yaw=0.0;
 int way_count = 0;
 
-ofstream path_file("/home/mz/Documents/zOS/src/SAL/gps/src/path.txt", std::ofstream::out);
+ofstream path_file("/home/mzjet/work/zOS-pix/src/SAL/gps/src/path.txt", std::ofstream::out);
 
 
 enum EMode
