@@ -1,0 +1,7 @@
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/install/lib/libsocketcan_cpp.a
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/install/lib/cmake/socketcan_cpp/socketcan_cpp-config.cmake
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/install/lib/cmake/socketcan_cpp/socketcan_cpp-config-version.cmake
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/install/lib/cmake/socketcan_cpp/socketcan_cpp-targets.cmake
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/install/lib/cmake/socketcan_cpp/socketcan_cpp-targets-noconfig.cmake
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/install/include/socketcan_cpp/socketcan_cpp/socketcan_cpp_export.h
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/install/include/socketcan_cpp/socketcan_cpp/socketcan_cpp.h

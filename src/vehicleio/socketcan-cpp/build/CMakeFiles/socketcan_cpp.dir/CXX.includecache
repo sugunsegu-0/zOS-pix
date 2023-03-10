@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/include/socketcan_cpp/socketcan_cpp.h
+string
+-
+socketcan_cpp/socketcan_cpp_export.h
+-
+linux/can.h
+-
+
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/src/socketcan_cpp.cpp
+../include/socketcan_cpp/socketcan_cpp.h
+/home/mzjet/work/zOS-pix/src/vehicleio/socketcan-cpp/include/socketcan_cpp/socketcan_cpp.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+net/if.h
+-
+sys/ioctl.h
+-
+sys/socket.h
+-
+linux/can/raw.h
+-
+
+gen/socketcan_cpp/socketcan_cpp_export.h
+

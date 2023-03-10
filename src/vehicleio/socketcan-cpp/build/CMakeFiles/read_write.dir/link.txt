@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/read_write.dir/examples/read_write.cpp.o  -o read_write  -Wl,-rpath,/home/mzjet/work/zOS-pix/BUILD/commons /usr/lib/aarch64-linux-gnu/libecal_core.so.5.11.3 /home/mzjet/work/zOS-pix/BUILD/commons/libcommons.so -lpthread libsocketcan_cpp.a /usr/lib/aarch64-linux-gnu/libecal_proto.a /usr/lib/aarch64-linux-gnu/libprotobuf.so -lpthread 
