@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/mz/Documents/zOS/src/commons/IPC/serialize-deserialize.hpp
+/home/mzjet/work/zOS-pix/src/commons/IPC/serialize-deserialize.hpp
 boost/archive/text_oarchive.hpp
 -
 boost/archive/text_iarchive.hpp
@@ -18,17 +18,17 @@ boost/archive/binary_iarchive.hpp
 boost/serialization/vector.hpp
 -
 
-/home/mz/Documents/zOS/src/commons/boost_serial/boost_serial_template.hpp
+/home/mzjet/work/zOS-pix/src/commons/boost_serial/boost_serial_template.hpp
 
-/home/mz/Documents/zOS/src/commons/commons.cpp
+/home/mzjet/work/zOS-pix/src/commons/commons.cpp
 commons.hpp
-/home/mz/Documents/zOS/src/commons/commons.hpp
+/home/mzjet/work/zOS-pix/src/commons/commons.hpp
 
-/home/mz/Documents/zOS/src/commons/commons.hpp
+/home/mzjet/work/zOS-pix/src/commons/commons.hpp
 IPC/serialize-deserialize.hpp
-/home/mz/Documents/zOS/src/commons/IPC/serialize-deserialize.hpp
+/home/mzjet/work/zOS-pix/src/commons/IPC/serialize-deserialize.hpp
 boost_serial/boost_serial_template.hpp
-/home/mz/Documents/zOS/src/commons/boost_serial/boost_serial_template.hpp
+/home/mzjet/work/zOS-pix/src/commons/boost_serial/boost_serial_template.hpp
 boost/archive/text_oarchive.hpp
 -
 boost/archive/text_iarchive.hpp

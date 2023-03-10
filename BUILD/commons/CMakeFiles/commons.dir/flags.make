@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_FLAGS =  -Wall -Ofast -DNDEBUG -fPIC   -std=gnu++17
 
-CXX_DEFINES = -DBOOST_ALL_NO_LIB -Dcommons_EXPORTS
+CXX_DEFINES = -Dcommons_EXPORTS
 
-CXX_INCLUDES = -I/home/mz/Documents/zOS/src/commons/IPC -I/home/mz/Documents/zOS/src/commons/boost_serial -isystem /usr/include/opencv4 
+CXX_INCLUDES = -I/home/mzjet/work/zOS-pix/src/commons/IPC -I/home/mzjet/work/zOS-pix/src/commons/boost_serial -isystem /usr/include/opencv4 
 
