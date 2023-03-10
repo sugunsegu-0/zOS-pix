@@ -19,6 +19,7 @@ set(CMAKE_MODULE_PATH "${ROOTDIR}/cmake" ${CMAKE_MODULE_PATH})
 
 message(${CMAKE_MODULE_PATH})
 
+find_package(Matplot++ REQUIRED)
 find_package(commons REQUIRED)
 find_package(datastructures REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -49,7 +50,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   
     eCAL::core
-  
+    Matplot++::matplot
 #   datastructures::motion-planning
   commons::commons
   # protobuf::libprotobuf

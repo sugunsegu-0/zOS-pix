@@ -23,6 +23,8 @@ struct FEEDBACK
     int wheel_speed_fr;
     int wheel_speed_rl;
     int wheel_speed_rr;
+    double pid_error;
+    double pid_target;
 };
 
 
@@ -46,6 +48,8 @@ namespace serialization {
     ar &f.wheel_speed_fr;
     ar &f.wheel_speed_rl;
     ar &f.wheel_speed_rr;
+    ar &f.pid_error;
+    ar &f.pid_target;
     }
 }
 }
